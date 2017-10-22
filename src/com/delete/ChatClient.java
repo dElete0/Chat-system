@@ -1,13 +1,15 @@
 package com.delete;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ChatClient extends Frame{
 
     TextField textField = new TextField();
     TextArea textArea = new TextArea();
 
-    public  static void main(String[] args){
+    public  static void main(String[] args) {
         new ChatClient().launchFrame();
     }
 
@@ -17,7 +19,18 @@ public class ChatClient extends Frame{
         add(textField,BorderLayout.SOUTH);
         add(textArea,BorderLayout.NORTH);
         pack();
+
+        //关闭窗口的监听器
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+
         setVisible(true);
     }
+
+
 
 }
