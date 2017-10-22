@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 public class ChatClient extends Frame{
 
     Socket s = null;
+    DataOutputStream dos = null;
 
     TextField textField = new TextField();
     TextArea textArea = new TextArea();
@@ -32,6 +33,7 @@ public class ChatClient extends Frame{
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                disconnect();
                 System.exit(0);
             }
         });
@@ -48,6 +50,7 @@ public class ChatClient extends Frame{
     public void connect() {
         try {
             s = new Socket("127.0.0.1", 8888);
+            dos = new DataOutputStream(s.getOutputStream()); 
 System.out.println("已经连上了");
         }catch (UnknownHostException e){
             e.printStackTrace();
@@ -64,16 +67,24 @@ System.out.println("已经连上了");
 
             //向服务器发送字符串
             try{
-                DataOutputStream dos = new DataOutputStream(s.getOutputStream());
                 dos.writeUTF(str);
                 dos.flush();
-                dos.close();
             }catch (IOException e1){
                 e1.printStackTrace();
             }
 
 
 
+        }
+    }
+
+    //断开连接，释放资源
+    public void disconnect() {
+        try{
+            dos.close();
+            s.close();
+        }catch (IOException e2){
+            e2.printStackTrace();
         }
     }
 
