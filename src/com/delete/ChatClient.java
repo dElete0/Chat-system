@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class ChatClient extends Frame{
 
@@ -34,6 +37,20 @@ public class ChatClient extends Frame{
         textField.addActionListener(new ChatClientListener());
 
         setVisible(true);
+
+        connect();
+    }
+
+    //连接服务器
+    public void connect() {
+        try {
+            Socket s = new Socket("127.0.0.1", 8888);
+System.out.println("已经连上了");
+        }catch (UnknownHostException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     private class ChatClientListener implements ActionListener {
