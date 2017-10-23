@@ -6,38 +6,64 @@ import java.io.IOException;
 
 public class ChatSever {
 
-    public static void main(String[] args) {
+    ServerSocket ss = null;
+    boolean started = false;
 
-        ServerSocket ss = null;
-        Socket s = null;
-        DataInputStream dis = null;
+    public static void main(String[] args) {
+        new ChatSever().start();
+    }
+
+    public void start() {
 
         try {
             ss = new ServerSocket(8888);
+            started = true;
         }catch (IOException e) {
             e.printStackTrace();
         }
 
-        try{
-            while (true) {
-                boolean ifConnected = false;
-                s = ss.accept();
-System.out.println("a client connected!");
-                ifConnected = true;
-                dis = new DataInputStream(s.getInputStream());
-                while(ifConnected) {
-                    String str = dis.readUTF();
-                    System.out.println(str);
-                }
+        try {
+            while (started) {
+                Socket s = ss.accept();
+                Client c = new Client(s);
+                System.out.println("a client connected!");
+                new Thread(c).start();
             }
         } catch (IOException e) {
-            System.out.println("Client closed!");
-        }finally {
+            e.printStackTrace();
+        } finally {
             try {
-                if(dis != null) dis.close();
-                if(s != null) s.close();
-            }catch (IOException e1){
-                e1.printStackTrace();
+                ss.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class Client implements Runnable{
+
+        private Socket s;
+        private DataInputStream dis = null;
+        private boolean ifConnect = false;
+
+        public Client(Socket s){
+            this.s = s;
+            try{
+                dis = new DataInputStream(s.getInputStream());
+                ifConnect = true;
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+        public void run() {
+            try{
+                while(ifConnect){
+                     String str = dis.readUTF();
+                     System.out.println(str);
+                }
+            }catch (IOException e){
+                e.printStackTrace();
             }
         }
     }
