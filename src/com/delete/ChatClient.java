@@ -50,7 +50,7 @@ public class ChatClient extends Frame{
     public void connect() {
         try {
             s = new Socket("127.0.0.1", 8888);
-            dos = new DataOutputStream(s.getOutputStream()); 
+            dos = new DataOutputStream(s.getOutputStream());
 System.out.println("已经连上了");
         }catch (UnknownHostException e){
             e.printStackTrace();

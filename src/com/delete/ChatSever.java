@@ -8,25 +8,37 @@ public class ChatSever {
 
     public static void main(String[] args) {
 
-        boolean started = false;
+        ServerSocket ss = null;
+        Socket s = null;
+        DataInputStream dis = null;
 
         try {
-            ServerSocket ss = new ServerSocket(8888);
-            started = true;
+            ss = new ServerSocket(8888);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try{
             while (true) {
                 boolean ifConnected = false;
-                Socket s = ss.accept();
+                s = ss.accept();
 System.out.println("a client connected!");
                 ifConnected = true;
-                DataInputStream dis = new DataInputStream(s.getInputStream());
+                dis = new DataInputStream(s.getInputStream());
                 while(ifConnected) {
                     String str = dis.readUTF();
                     System.out.println(str);
                 }
-                dis.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Client closed!");
+        }finally {
+            try {
+                if(dis != null) dis.close();
+                if(s != null) s.close();
+            }catch (IOException e1){
+                e1.printStackTrace();
+            }
         }
     }
 }
