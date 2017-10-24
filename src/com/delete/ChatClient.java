@@ -15,6 +15,7 @@ public class ChatClient extends Frame{
 
     Socket s = null;
     DataOutputStream dos = null;
+    private boolean ifConnect = false;
 
     TextField textField = new TextField();
     TextArea textArea = new TextArea();
@@ -47,8 +48,13 @@ public class ChatClient extends Frame{
 
         connect();
 
-        while (true){
-            textArea.setText(getUTF(s));
+        while (ifConnect){
+            String str = textArea.getText();
+            if(str == null){
+                textArea.setText(getUTF(s));
+            } else {
+                textArea.setText(str + "\n" + getUTF(s));
+            }
         }
     }
 
@@ -58,6 +64,7 @@ public class ChatClient extends Frame{
             s = new Socket("127.0.0.1", 8888);
             dos = new DataOutputStream(s.getOutputStream());
 System.out.println("已经连上了");
+            ifConnect = true;
         }catch (UnknownHostException e){
             e.printStackTrace();
         }catch (IOException e){

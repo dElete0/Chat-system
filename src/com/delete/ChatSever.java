@@ -12,7 +12,7 @@ public class ChatSever {
     ServerSocket ss = null;
     boolean started = false;
 
-    List<Client> clients = new ArrayList<Client>();
+    List<Client> clients = new ArrayList<>();
 
     public static void main(String[] args) {
         new ChatSever().start();
