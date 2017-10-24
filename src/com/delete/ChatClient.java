@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -22,6 +23,7 @@ public class ChatClient extends Frame{
         new ChatClient().launchFrame();
     }
 
+    //窗口界面
     public void launchFrame(){
         setLocation(400,400);
         this.setSize(300,300);
@@ -44,6 +46,10 @@ public class ChatClient extends Frame{
         setVisible(true);
 
         connect();
+
+        while (true){
+            textArea.setText(getUTF(s));
+        }
     }
 
     //连接服务器
@@ -59,20 +65,38 @@ System.out.println("已经连上了");
         }
     }
 
+    //输出监听器
     private class ChatClientListener implements ActionListener {
-        public void actionPerformed(ActionEvent e){
+        public void actionPerformed(ActionEvent e) {
             String str = textField.getText().trim();
             textArea.setText(str);
             textField.setText("");
 
             //向服务器发送字符串
-            try{
+            try {
                 dos.writeUTF(str);
                 dos.flush();
-            }catch (IOException e1){
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
+    }
+
+    //输入方法
+    public String getUTF(Socket s){
+        DataInputStream dis = null;
+        try {
+            dis = new DataInputStream(s.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String str = null;
+        try {
+            str = dis.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     //断开连接，释放资源
