@@ -72,9 +72,6 @@ System.out.println("已经连上了");
             }catch (IOException e1){
                 e1.printStackTrace();
             }
-
-
-
         }
     }
 
